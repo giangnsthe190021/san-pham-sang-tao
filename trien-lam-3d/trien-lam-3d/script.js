@@ -312,15 +312,18 @@ const fsExit = document.exitFullscreen || document.webkitExitFullscreen;
 const getFsElement = () => document.fullscreenElement || document.webkitFullscreenElement || null;
 const fsHint = document.createElement('div');
 fsHint.id = 'fullscreen-hint';
-fsHint.setAttribute('role', 'status');
-fsHint.innerHTML = 'Trình duyệt iPhone không cho phép toàn màn hình.<br>Bấm <b>Chia sẻ</b> → <b>Thêm vào Màn hình chính</b>, rồi mở bảo tàng từ biểu tượng đó để xem toàn màn hình.';
+fsHint.setAttribute('role', 'dialog');
+fsHint.innerHTML = '<div class="fs-hint-card"><p class="fs-hint-title">Xem toàn màn hình trên iPhone</p>' +
+    '<ol><li>Bấm nút <b>Chia sẻ</b> <span class="fs-share-icon">⬆︎</span> của trình duyệt</li>' +
+    '<li>Chọn <b>Thêm vào Màn hình chính</b></li>' +
+    '<li>Mở bảo tàng từ biểu tượng vừa tạo</li></ol>' +
+    '<p class="fs-hint-note">Apple không cho website tự thêm vào Màn hình chính, nên bạn cần thực hiện các bước trên.</p>' +
+    '<button type="button" class="fs-hint-ok">Đã hiểu</button></div>';
 document.body.appendChild(fsHint);
-let fsHintTimer = 0;
-function showFullscreenHint() {
-    fsHint.classList.add('show');
-    clearTimeout(fsHintTimer);
-    fsHintTimer = setTimeout(() => fsHint.classList.remove('show'), 6500);
-}
+function showFullscreenHint() { fsHint.classList.add('show'); }
+fsHint.addEventListener('click', (event) => {
+    if (event.target === fsHint || event.target.closest('.fs-hint-ok')) fsHint.classList.remove('show');
+});
 
 fullscreenBtn.addEventListener('click', async (event) => {
     event.stopPropagation();
