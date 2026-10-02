@@ -207,3 +207,82 @@ body.outside-mode .guide-caption { bottom: 30px; }
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
 }
+
+/* ===== ĐIỆN THOẠI: YÊU CẦU XOAY NGANG + BỐ CỤC MÀN HÌNH NGANG NHỎ ===== */
+[hidden] { display: none !important; }
+
+#rotate-overlay { display: none; position: fixed; inset: 0; z-index: 3000; align-items: center; justify-content: center; padding: 24px; background: radial-gradient(circle at 50% 40%, rgba(143,24,32,.35), transparent 55%), #090706; text-align: center; }
+.rotate-card { max-width: 340px; }
+.rotate-phone { position: relative; width: 64px; height: 108px; margin: 0 auto 30px; border: 3px solid var(--museum-gold-pale); border-radius: 12px; transform-origin: center; animation: rotate-hint 2.8s ease-in-out infinite; }
+.rotate-phone span { position: absolute; left: 50%; bottom: 7px; width: 18px; height: 3px; border-radius: 2px; background: var(--museum-gold-pale); transform: translateX(-50%); }
+.rotate-phone::before { content: ''; position: absolute; inset: 9px 6px 18px; border-radius: 4px; background: linear-gradient(145deg, rgba(143,24,32,.7), rgba(215,180,91,.25)); }
+@keyframes rotate-hint { 0%, 15% { transform: rotate(0deg); } 50%, 75% { transform: rotate(-90deg); } 100% { transform: rotate(0deg); } }
+.rotate-title { color: var(--museum-gold-pale); font-family: var(--font-display); font-size: 1.35rem; line-height: 1.3; }
+.rotate-sub { margin-top: 12px; color: rgba(255,255,255,.62); font-size: .85rem; line-height: 1.65; }
+
+/* Màn hình cảm ứng đang để dọc: chỉ hiện lời nhắc xoay ngang. */
+@media (pointer: coarse) and (orientation: portrait) and (max-width: 900px) {
+    #rotate-overlay { display: flex; }
+}
+
+/* Điện thoại xoay ngang (chiều cao nhỏ): thu gọn toàn bộ giao diện. */
+@media (pointer: coarse) and (orientation: landscape) and (max-height: 520px) {
+    .ui-layer { padding: max(8px, env(safe-area-inset-top)) max(10px, env(safe-area-inset-right)) 0 max(10px, env(safe-area-inset-left)); gap: 8px; }
+    .progress-box { width: min(210px, 34vw); padding: 8px 11px; border-radius: 10px; }
+    .museum-name { font-size: .5rem; letter-spacing: .12em; }
+    .location-row { margin: 4px 0 6px; gap: 2px; }
+    .section-label { font-size: .5rem; }
+    .location-row strong { font-size: .72rem; max-width: 100%; }
+    .progress-meta { justify-content: flex-end; margin-bottom: 5px; font-size: .55rem; }
+    .progress-meta span:first-child { display: none; }
+    .action-box { gap: 1px; padding: 2px; margin-left: auto; }
+    .action-btn { min-height: 30px; padding: 0 8px; gap: 5px; font-size: .62rem; }
+    .action-btn.primary span:last-child, .view-toggle span:last-child, .voice-toggle span:last-child { display: none; }
+    .view-toggle, .voice-toggle { min-width: 30px; padding: 0 8px; }
+    .theme-toggle { min-width: 0; }
+    .icon-btn { width: 30px; font-size: .85rem; }
+    .media-popover { right: -60px; width: 220px; padding: 12px; }
+
+    #joystick-base { left: max(18px, env(safe-area-inset-left)); bottom: 18px; width: 92px; height: 92px; }
+    #joystick-stick { top: 25px; left: 25px; width: 38px; height: 38px; }
+
+    .guide-caption { left: 134px; right: 74px; bottom: 10px; width: auto; gap: 9px; padding: 8px 11px; border-radius: 10px; transform: none; }
+    .guide-caption.hidden { transform: translateY(14px); }
+    body.outside-mode .guide-caption { bottom: 10px; }
+    .guide-caption-avatar { width: 28px; height: 28px; }
+    .guide-caption-initial { font-size: .85rem; }
+    .guide-caption-name { font-size: .5rem; letter-spacing: .12em; }
+    .guide-caption-text { margin-top: 3px; max-height: 3.6em; font-size: .68rem; line-height: 1.5; }
+    .guide-caption-stop { width: 24px; height: 24px; font-size: .5rem; }
+    .guide-call-btn { right: max(12px, env(safe-area-inset-right)); bottom: 14px; min-height: 36px; padding: 0 11px; }
+    .guide-call-label { display: none; }
+
+    .info-panel { top: 50px; right: 8px; bottom: 8px; left: auto; width: min(46vw, 400px); max-height: none; padding: 26px 20px 18px; border-radius: 12px; transform: translateX(0); }
+    .info-panel.closed { transform: translateX(calc(100% + 20px)); }
+    .panel-meta { margin: 12px 0 8px; }
+    .panel-title { font-size: 1.25rem; }
+    .divider { margin: 12px 0; }
+    .panel-desc { font-size: .74rem; line-height: 1.6; }
+    .panel-speak-btn { margin-top: 12px; padding: 8px 12px; font-size: .66rem; }
+    .close-btn { top: 8px; right: 8px; width: 28px; height: 28px; }
+
+    .modal-layer { align-items: center; padding: 8px; }
+    .modal-card { width: min(460px, 100%); max-height: calc(100vh - 16px); overflow-y: auto; padding: 18px 20px 16px; border-radius: 10px; }
+    .modal-card h2 { margin: 6px auto 8px; font-size: 1.35rem; }
+    .modal-card > p:last-of-type { font-size: .74rem; line-height: 1.55; }
+    .modal-actions { flex-direction: row; gap: 8px; margin-top: 14px; }
+    .modal-btn { width: auto; flex: 1; min-height: 36px; padding: 0 12px; font-size: .68rem; }
+    .architectural-mark, .completion-seal { display: none; }
+    .room-number { margin-bottom: 6px; font-size: .7rem; }
+
+    #blocker { padding: 12px 18px; overflow-y: auto; }
+    #instructions { margin-right: 0; transform: none; }
+    #instructions h1 { margin: 8px 0 8px; font-size: clamp(1.5rem, 6vw, 2.3rem); }
+    .landing-intro { font-size: .72rem; line-height: 1.5; }
+    .landing-cta { margin-top: 12px; padding: 10px 14px; gap: 16px; }
+    .control-guide, .control-guide-note { display: none; }
+
+    .room6-continue-btn { bottom: 12px; }
+    .room6-audio-fallback { bottom: 56px; }
+    #interaction-hint { font-size: .56rem; padding: 4px 8px; }
+}

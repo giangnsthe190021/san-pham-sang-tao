@@ -303,19 +303,36 @@ helpBtn.addEventListener('click', (event) => {
     else blocker.style.display = 'grid';
 });
 
+// Fullscreen: standard API, WebKit-prefixed fallback (Android WebView / old Safari).
+// iPhone Safari has no element fullscreen at all, so the button is hidden there
+// (the page is then meant to be added to the Home Screen, see the meta tags).
+const fsRoot = document.documentElement;
+const fsRequest = fsRoot.requestFullscreen || fsRoot.webkitRequestFullscreen;
+const fsExit = document.exitFullscreen || document.webkitExitFullscreen;
+const getFsElement = () => document.fullscreenElement || document.webkitFullscreenElement || null;
+if (!fsRequest) fullscreenBtn.hidden = true;
+
 fullscreenBtn.addEventListener('click', async (event) => {
     event.stopPropagation();
     try {
-        if (!document.fullscreenElement) await document.documentElement.requestFullscreen();
-        else await document.exitFullscreen();
+        if (!getFsElement()) {
+            await fsRequest.call(fsRoot);
+            // Phones: keep the exhibition in landscape once fullscreen is granted.
+            if (isTouchDevice && screen.orientation?.lock) screen.orientation.lock('landscape').catch(() => {});
+        } else {
+            await fsExit.call(document);
+        }
     } catch (error) {
         console.warn('Không thể chuyển chế độ toàn màn hình:', error);
     }
 });
 
-document.addEventListener('fullscreenchange', () => {
-    fullscreenBtn.setAttribute('aria-label', document.fullscreenElement ? 'Thoát toàn màn hình' : 'Toàn màn hình');
-});
+function syncFullscreenLabel() {
+    fullscreenBtn.setAttribute('aria-label', getFsElement() ? 'Thoát toàn màn hình' : 'Toàn màn hình');
+    window.dispatchEvent(new Event('resize'));
+}
+document.addEventListener('fullscreenchange', syncFullscreenLabel);
+document.addEventListener('webkitfullscreenchange', syncFullscreenLabel);
 
 controls.addEventListener('lock', function () {
     blocker.style.display = 'none';
