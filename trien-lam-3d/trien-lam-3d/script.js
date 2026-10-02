@@ -310,10 +310,21 @@ const fsRoot = document.documentElement;
 const fsRequest = fsRoot.requestFullscreen || fsRoot.webkitRequestFullscreen;
 const fsExit = document.exitFullscreen || document.webkitExitFullscreen;
 const getFsElement = () => document.fullscreenElement || document.webkitFullscreenElement || null;
-if (!fsRequest) fullscreenBtn.hidden = true;
+const fsHint = document.createElement('div');
+fsHint.id = 'fullscreen-hint';
+fsHint.setAttribute('role', 'status');
+fsHint.innerHTML = 'Trình duyệt iPhone không cho phép toàn màn hình.<br>Bấm <b>Chia sẻ</b> → <b>Thêm vào Màn hình chính</b>, rồi mở bảo tàng từ biểu tượng đó để xem toàn màn hình.';
+document.body.appendChild(fsHint);
+let fsHintTimer = 0;
+function showFullscreenHint() {
+    fsHint.classList.add('show');
+    clearTimeout(fsHintTimer);
+    fsHintTimer = setTimeout(() => fsHint.classList.remove('show'), 6500);
+}
 
 fullscreenBtn.addEventListener('click', async (event) => {
     event.stopPropagation();
+    if (!fsRequest) { showFullscreenHint(); return; }
     try {
         if (!getFsElement()) {
             await fsRequest.call(fsRoot);

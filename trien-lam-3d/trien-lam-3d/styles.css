@@ -286,3 +286,7 @@ body.outside-mode .guide-caption { bottom: 30px; }
     .room6-audio-fallback { bottom: 56px; }
     #interaction-hint { font-size: .56rem; padding: 4px 8px; }
 }
+
+#fullscreen-hint { position: fixed; left: 50%; top: 64px; z-index: 2500; width: min(420px, calc(100vw - 32px)); padding: 12px 16px; border: 1px solid var(--line); border-radius: 10px; background: var(--glass-strong); box-shadow: var(--shadow); color: var(--ivory); font-size: .78rem; line-height: 1.6; text-align: center; opacity: 0; pointer-events: none; transform: translate(-50%, -8px); transition: opacity .25s, transform .25s; }
+#fullscreen-hint.show { opacity: 1; transform: translate(-50%, 0); }
+#fullscreen-hint b { color: var(--museum-gold-pale); }
